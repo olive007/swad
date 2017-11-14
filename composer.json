@@ -1,0 +1,21 @@
+{
+    "name": "devolive/swad",
+    "description": "Skeleton for web application",
+    "authors": [
+        {
+            "name": "SECRET Olivier",
+            "email": "info@devolive.be"
+        }
+    ],
+    "license": "GPU",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">= 7.1"
+    },
+    "autoload": {
+	"psr-0": {
+	    "Devolive": ["src/",
+	    "test/"]
+	}
+    }
+}
