@@ -1,0 +1,14 @@
+@font-face {
+	font-family: $fontName;
+	src: url('/font/#{$fontFileName}.eot');
+	src: url('/font/#{$fontFileName}.eot?#iefix') format('embedded-opentype'),
+	url('/font/#{$fontFileName}.woff2') format('woff2'),
+	url('/font/#{$fontFileName}.woff') format('woff'),
+	url('/font/#{$fontFileName}.svg') format('svg');
+	font-weight: $fontWeight;
+	font-style: $fontStyle;
+}
+
+.#{$fontPrefix}#{ucfirst($fontName)}, .font#{ucfirst($fontName)} * {
+	font-family: $fontName;
+}

@@ -1,0 +1,94 @@
+Modeler.Screen = class extends Modeler.Element {
+
+	// Constructor
+	constructor(htmlNode) {
+
+		super(document.getElementsByTagName("body")[0], null);
+
+		this.contents = {};
+		this.modelizeFunctionTab = {};
+		this.modelizeFunctionTabIndex = "";
+		{% for key, screenSuffix in screen %}
+			this.contents["{{screenSuffix}}"] = Modeler.createNewChild(htmlNode, this, "-{{screenSuffix}}");
+			this.contents["{{screenSuffix}}"].screen = this;
+			this.contents["{{screenSuffix}}"].layout = this;
+
+			this.modelizeFunctionTab["{{screenSuffix}}"] = {};
+			{% for key, value in font %}
+				this.modelizeFunctionTab["{{screenSuffix}}"]["{{html.fontPrefix}}{{ value[:1]|upper ~ value[1:] }}"] = function(){};
+			{% endfor %}
+
+			{% for key, value in color %}
+				this.modelizeFunctionTab["{{screenSuffix}}"]["{{html.colorBackgroundPrefix}}{{ value[:1]|upper ~ value[1:] }}"] = function(){};
+				this.modelizeFunctionTab["{{screenSuffix}}"]["{{html.colorBorderPrefix}}{{ value[:1]|upper ~ value[1:] }}"] = function(){};
+				this.modelizeFunctionTab["{{screenSuffix}}"]["{{html.colorFontPrefix}}{{ value[:1]|upper ~ value[1:] }}"] = function(){};
+				this.modelizeFunctionTab["{{screenSuffix}}"]["{{html.colorInputPrefix}}{{ value[:1]|upper ~ value[1:] }}"] = function(){};
+			{% endfor %}
+
+			{% for key, value in html %}
+				this.modelizeFunctionTab["{{screenSuffix}}"]["{{value}}"] = function(){};
+				this.modelizeFunctionTab["{{screenSuffix}}"]["{{value}}-{{screen.Small}}"] = function(){};
+				this.modelizeFunctionTab["{{screenSuffix}}"]["{{value}}-{{screen.Medium}}"] = function(){};
+				this.modelizeFunctionTab["{{screenSuffix}}"]["{{value}}-{{screen.Large}}"] = function(){};
+			{% endfor %}
+
+		{% endfor %}
+
+		this.modelizeFunctionTab["{{screen.Small}}"]["{{html.textAlignMiddle}}-{{screen.Small}}"]	= modelizeTextAlignMiddle;
+		this.modelizeFunctionTab["{{screen.Medium}}"]["{{html.textAlignMiddle}}-{{screen.Medium}}"]	= modelizeTextAlignMiddle;
+		this.modelizeFunctionTab["{{screen.Large}}"]["{{html.textAlignMiddle}}-{{screen.Large}}"]	= modelizeTextAlignMiddle;
+
+		this.modelizeFunctionTab["{{screen.Small}}"]["{{html.textFilled}}-{{screen.Small}}"]	= modelizeTextFilled;
+		this.modelizeFunctionTab["{{screen.Medium}}"]["{{html.textFilled}}-{{screen.Medium}}"]	= modelizeTextFilled;
+		this.modelizeFunctionTab["{{screen.Large}}"]["{{html.textFilled}}-{{screen.Large}}"]	= modelizeTextFilled;
+
+	}
+
+
+	// Getter
+	getWidthSize() {
+		return round(parseFloat(window.getComputedStyle(this.htmlNode, null).getPropertyValue("width")), 2);
+	}
+
+	getHeightSize() {
+		return round(parseFloat(window.getComputedStyle(this.htmlNode, null).getPropertyValue("height")), 2);
+	}
+
+	getModelizeFunctionTab() {
+		return this.modelizeFunctionTab[this.modelizeFunctionTabIndex];
+	}
+
+
+	// Method
+	modelize() {
+
+		// Initialize variable
+		var suffix;
+		var bodyWidth = parseInt(document.body.clientWidth);
+
+		// Get the right suffix for the screen
+		if (bodyWidth > 1200) {
+			suffix = "{{screen.Large}}";
+		}
+		else if (bodyWidth > 992) {
+			suffix = "{{screen.Medium}}";
+		}
+		else {
+			suffix = "{{screen.Small}}";
+		}
+
+		this.modelizeFunctionTabIndex = suffix
+		this.contents[suffix].modelize();
+
+	}
+
+	modelizeChild(child) {
+		child.htmlNode.style.width	= this.getWidthSize()+"px";
+		child.htmlNode.style.height	= this.getHeightSize()+"px";
+	}
+
+	computeSize(attr) {
+		return .0;
+	}
+
+};

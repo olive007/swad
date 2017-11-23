@@ -1,0 +1,13 @@
+Modeler.createNewChild = function(htmlNode, screen, suffix) {
+
+	if (htmlNode.classList.contains("{{html.linearLayout}}")) {
+		return new Modeler.LinearLayout(htmlNode, screen, suffix);
+	}
+	else if (htmlNode.classList.contains("{{html.relativeLayout}}")) {
+		return new Modeler.RelativeLayout(htmlNode, screen, suffix);
+	}
+	else {
+		return new Modeler.Child(htmlNode, screen, suffix);
+	}
+
+};

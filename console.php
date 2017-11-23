@@ -4,12 +4,10 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$config = [];
-$config['controller.directory'] = __DIR__.'/Controllers';
+$config = require __DIR__.'/test/config.php';
 
-use Devolive\Application;
-use Devolive\Testor;
+$app = new Swad\Application($config);
 
-$app = new Application($config);
+$console = new Swad\Console($app, __DIR__.'/test/functionality');
 
-exit(Testor::testAll($app));
+exit($console->run($argv));

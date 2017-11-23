@@ -1,0 +1,183 @@
+@import 'mixin';
+
+html, body {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+body > * {
+	width: 100%;
+	height: 100%;
+}
+
+#jsDisabled {
+	font-size: 36px;
+	font-size: 5vw;
+	text-align: center;
+	overflow: scroll;
+
+	p {
+		padding: 75px 0;
+		padding: 25vh 0;
+	}
+	br {
+		line-height: 15vw;
+	}
+
+}
+
+#loading,  #resizing {
+	margin-top: 100px;
+	margin-top: 30vh;
+	font-size: 100px;
+	font-size: 8vw;
+	text-align: center;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+form > div {
+	margin-bottom: 15px;
+}
+
+form label {
+	font-size: inherit;
+	display: inline-block;
+	text-align: right;
+	margin-right: 5px;
+}
+
+form input {
+	font-size: inherit;
+	height: 100%;
+	border: none;
+	padding: 5px;
+	border-radius: 10px;
+}
+
+form input:invalid {
+  box-shadow: none;
+}
+
+form input.error {
+	border: 5px solid black;
+}
+
+form button {
+	font-size: inherit;
+	width: 100%;
+	border: none;
+	margin: 0;
+	padding: 15px;
+	border-radius: 10px;
+	background: linear-gradient(rgba(255, 255, 255, .05), rgba(0, 0, 0, .05));
+	&:hover {
+		background: linear-gradient(rgba(200, 200, 200, 0.2), rgba(100, 100, 100, 0.2));
+		border-radius: 15px;
+ 	}
+}
+
+.#{$linearLayout} > * {
+	display: inline-block;
+	font-size: 1px;
+	line-height: 1.2;
+}
+
+.#{$linearLayout} {
+	font-size: 0; // To remove vertical space between all the children need to be after the children declaration
+	line-height: 0;
+	overflow: hidden;
+
+
+	& > *.#{$overflowHorizontal} {
+		@include multipleScreenRule {
+			overflow-x: scroll;
+			overflow-y: hidden;
+		}
+	}
+
+	& > *.#{$overflowVertical} {
+		@include multipleScreenRule {
+			overflow-x: hidden;
+			overflow-y: scroll;
+		}
+	}
+}
+
+.#{$relativeLayout} {
+	// position: relative; Done by js script
+	overflow: hidden;
+
+	& > * {
+		// position: absolute; Done by js script
+	}
+
+	& > .#{$positionTop} {
+		@include multipleScreenRule {
+			top: 0;
+		}
+	}
+
+	& > .#{$positionMiddle} {
+		@include multipleScreenRule {
+			top: 0;
+			bottom: 0;
+		}
+	}
+
+	& > .#{$positionBottom} {
+		@include multipleScreenRule {
+			bottom: 0;
+		}
+	}
+
+	& > .#{$positionLeft} {
+		@include multipleScreenRule {
+			left: 0;
+			margin: auto;
+		}
+	}
+
+	& > .#{$positionCenter} {
+		@include multipleScreenRule {
+			left: 0;
+			right: 0;
+			margin: auto;
+		}
+	}
+
+	& > .#{$positionRight} {
+		@include multipleScreenRule {
+			right: 0;
+			margin: auto;
+		}
+	}
+}
+
+.#{$textAlignLeft} {
+	@include multipleScreenRule {
+		text-align: left;
+	}
+}
+
+.#{$textAlignCenter} {
+	@include multipleScreenRule {
+		text-align: center;
+	}
+}
+
+.#{$textAlignRight} {
+	@include multipleScreenRule {
+		text-align: right;
+	}
+}
+
+.#{$textAlignJustify} {
+	@include multipleScreenRule {
+		text-align: justify;
+	}
+}

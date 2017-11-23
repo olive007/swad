@@ -1,0 +1,42 @@
+Modeler.Layout = class extends Modeler.Child {
+
+	constructor(htmlNode, screen, suffix) {
+
+		super(htmlNode, screen, suffix);
+
+		// Intialize attributes
+		this.children = [];
+
+		for (var i = htmlNode.childNodes.length; --i >= 0;) {
+
+			var child = Modeler.createNewChild(htmlNode.childNodes[i], screen, suffix);
+			child.layout = this;
+			child.layout.addChildAttribute(child, suffix);
+
+			this.children.push(child);
+
+		}
+	}
+
+
+	// Method
+	addChildAttribute(child, suffix) {
+
+	}
+	
+	modelize() {
+
+		super.modelize();
+
+		for (var i = this.children.length; --i >= 0;) {
+
+			this.children[i].htmlNode.style.fontSize = (parseFloat(this.children[i].fontSizeAttr) * this.screen.getWidthSize() / 1000)+"px";
+
+			this.modelizeChildBefore(this.children[i]);
+			this.children[i].modelize();
+			this.modelizeChildAfter(this.children[i]);
+		}
+
+	}
+
+};

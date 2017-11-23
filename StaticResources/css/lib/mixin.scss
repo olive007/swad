@@ -1,0 +1,19 @@
+@mixin multipleScreenRule {
+	&#{-$screenSmall} {
+		@media only screen and (max-width : 991px) {
+			@content;
+		}
+	}
+
+	&#{-$screenMedium} {
+		@media only screen and (min-width : 992px) and (max-width: 1199px) {
+			@content;
+		}
+	}
+
+	&#{-$screenLarge} {
+		@media only screen and (min-width : 1200px) {
+			@content;
+		}
+	}
+}

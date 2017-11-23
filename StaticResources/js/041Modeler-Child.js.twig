@@ -1,0 +1,62 @@
+Modeler.Child = class extends Modeler.Element {
+
+	constructor(htmlNode, screen, suffix) {
+
+		super(htmlNode, screen);
+
+		this.layout				= null;
+		this.maxLayoutWidth		= .0;
+		this.maxLayoutHeight	= .0;
+
+		// Get modeler attributes
+		this.widthAttr			= this.htmlNode.getAttribute("{{LayoutWidth}}"+suffix);
+		this.heightAttr			= this.htmlNode.getAttribute("{{LayoutHeight}}"+suffix);
+		this.borderTopAttr		= this.htmlNode.getAttribute("{{ElementBorderTop}}"+suffix);
+		this.borderRightAttr	= this.htmlNode.getAttribute("{{ElementBorderRight}}"+suffix);
+		this.borderBottomAttr	= this.htmlNode.getAttribute("{{ElementBorderBottom}}"+suffix);
+		this.borderLeftAttr		= this.htmlNode.getAttribute("{{ElementBorderLeft}}"+suffix);
+		this.borderRadiusAttr	= this.htmlNode.getAttribute("{{ElementBorderRadius}}"+suffix);
+		this.paddingTopAttr		= this.htmlNode.getAttribute("{{ElementPaddingTop}}"+suffix);
+		this.paddingRightAttr	= this.htmlNode.getAttribute("{{ElementPaddingRight}}"+suffix);
+		this.paddingBottomAttr	= this.htmlNode.getAttribute("{{ElementPaddingBottom}}"+suffix);
+		this.paddingLeftAttr	= this.htmlNode.getAttribute("{{ElementPaddingLeft}}"+suffix);
+		this.fontSizeAttr		= this.htmlNode.getAttribute("{{TextFontSize}}"+suffix);
+
+	}
+
+
+	// Getter
+	getWidthSize() {
+		return round(parseFloat(window.getComputedStyle(this.htmlNode, null).getPropertyValue("width")) - 0.01, 2);
+	}
+
+	getHeightSize() {
+		return round(parseFloat(window.getComputedStyle(this.htmlNode, null).getPropertyValue("height")) - 0.01, 2);
+	}
+
+
+	// Method
+	modelize() {
+
+		// Compute border
+		this.htmlNode.style.borderTop		= this.layout.computeSize(this.borderTopAttr)+"px";
+		this.htmlNode.style.borderRight		= this.layout.computeSize(this.borderRightAttr)+"px";
+		this.htmlNode.style.borderLeft		= this.layout.computeSize(this.borderLeftAttr)+"px";
+		this.htmlNode.style.borderBottom	= this.layout.computeSize(this.borderBottomAttr)+"px";
+		this.htmlNode.style.borderStyle		= "solid";
+		this.htmlNode.style.borderColor		= "";
+		this.htmlNode.style.borderRadius	= this.layout.computeSize(this.borderRadiusAttr)+"px";
+		// Compute Padding		
+		this.htmlNode.style.paddingTop		= this.layout.computeSize(this.paddingTopAttr)+"px";
+		this.htmlNode.style.paddingRight	= this.layout.computeSize(this.paddingRightAttr)+"px";
+		this.htmlNode.style.paddingLeft		= this.layout.computeSize(this.paddingLeftAttr)+"px";
+		this.htmlNode.style.paddingBottom	= this.layout.computeSize(this.paddingBottomAttr)+"px";
+
+		for (var i = this.htmlNode.classList.length; --i >= 0; ) {
+			this.screen.getModelizeFunctionTab()[this.htmlNode.classList[i]](this);
+		}
+
+
+	}
+
+};

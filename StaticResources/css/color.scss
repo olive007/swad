@@ -1,0 +1,29 @@
+.#{$colorBackgroundPrefix}#{$colorName} {
+
+	background-color: $colorValue;
+
+}
+
+.#{$colorFontPrefix}#{$colorName} {
+
+	& button, & form button {
+		background-color: $colorValue;
+		color: $reverseColorValue;
+	}
+
+	color: $colorValue;
+
+}
+
+.#{$colorInputPrefix}#{$colorName} input {
+
+	background-color: $colorValue;
+	color: $reverseColorValue;
+
+}
+
+.#{$colorBorderPrefix}#{$colorName} {
+
+	border-color: $colorValue;
+
+}

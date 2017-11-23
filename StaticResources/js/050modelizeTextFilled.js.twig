@@ -1,0 +1,30 @@
+function modelizeTextFilled(element) {
+
+	// Get the size of the block
+	var width	= element.htmlNode.clientWidth;
+	var height	= element.htmlNode.clientHeight;
+
+	// Get the font computed from the block
+	var font = getFontCssStyle(element.htmlNode, "1000px");
+
+	// Get the with with a font Size of 1000px;
+	var textWidth = computeTextWidth(element.htmlNode.innerHTML, font);
+
+
+	var style = window.getComputedStyle(element.htmlNode);
+
+	var fontSize = parseFloat(style.getPropertyValue('font-size'));
+
+	// Calculate the ratio between the with of the block and those font
+	var ratio = 1000 / textWidth * width;
+	
+	// Verify if the font size is not bigger than the height
+	var newFontSize = ratio
+
+	//fontSize = fontSize < height ? fontSize : height;
+
+	// Set the value to the css style
+	element.htmlNode.style.lineHeight = newFontSize+"px";
+	element.htmlNode.style.fontSize = newFontSize+"px";
+
+};

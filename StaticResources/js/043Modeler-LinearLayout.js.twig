@@ -1,0 +1,117 @@
+Modeler.LinearLayout = class extends Modeler.Layout {
+
+	// Constructor
+	constructor(htmlNode, screen, suffix) {
+
+		super(htmlNode, screen, suffix);
+
+		// Get the weight of the linear layout
+		this.weight = parseInt(this.htmlNode.getAttribute("{{LinearLayoutWeight}}"+suffix));
+
+		this.orientation = this.htmlNode.getAttribute("{{LinearLayoutOrientation}}"+suffix);
+
+		// Sort the children to position max at the end
+		var childrenTmp = Array.prototype.slice.call(this.children, 0);
+
+		if (this.orientation) {
+			childrenTmp.sort(
+				function(x, y) {
+					return x.htmlNode.getAttribute("{{LayoutHeight}}"+suffix) - y.htmlNode.getAttribute("{{LayoutHeight}}"+suffix);
+				});
+		}
+		else {
+			childrenTmp.sort(
+				function(x, y) {
+					return x.htmlNode.getAttribute("{{LayoutWidth}}"+suffix) - y.htmlNode.getAttribute("{{LayoutWidth}}"+suffix);
+				});
+		}
+
+		this.children = childrenTmp;
+
+	}
+
+
+	// Getter
+	getReferenceSize() {
+		if (this.orientation == "{{horizontal}}") {
+			if (this.widthSizeSaved == undefined){
+				this.widthSizeSaved = this.getWidthSize();
+			}
+			return this.widthSizeSaved;
+		}
+		if (this.heightSizeSaved == undefined){
+			this.heightSizeSaved = this.getHeightSize();
+		}
+		return this.heightSizeSaved;
+	}
+
+
+	// Method
+	addChildAttribute(child, suffix) {
+		
+		child.marginTopAttr		= child.htmlNode.getAttribute("{{LinearLayoutMarginTop}}"+suffix);
+		child.marginRightAttr	= child.htmlNode.getAttribute("{{LinearLayoutMarginRight}}"+suffix);
+		child.marginBottomAttr	= child.htmlNode.getAttribute("{{LinearLayoutMarginBottom}}"+suffix);
+		child.marginLeftAttr	= child.htmlNode.getAttribute("{{LinearLayoutMarginLeft}}"+suffix);
+
+	}
+
+	computeSize(attr) {
+		
+		var attrValue = parseInt(attr || "0");
+
+		return round((attrValue * this.getReferenceSize() / this.weight), 2);
+
+	}
+
+	modelizeChildBefore(child) {
+
+		var widthValue		= parseInt(child.widthAttr);
+		var heightValue		= parseInt(child.heightAttr);
+		var newWidthSize	= .0;
+		var newHeightSize	= .0;
+
+
+		// Set the margin value
+		child.htmlNode.style.marginTop		= child.layout.computeSize(child.marginTopAttr)+"px";
+		child.htmlNode.style.marginRight	= child.layout.computeSize(child.marginRightAttr)+"px";
+		child.htmlNode.style.marginBottom	= child.layout.computeSize(child.marginBottomAttr)+"px";
+		child.htmlNode.style.marginLeft		= child.layout.computeSize(child.marginLeftAttr)+"px";
+
+		if (widthValue == {{max}}) { // The width is set to max
+			newWidthSize = this.getWidthSize() - this.computeSize(child.marginLeftAttr) - this.computeSize(child.marginRightAttr);
+			child.htmlNode.style.width = newWidthSize+"px";
+		}
+		else if (widthValue == {{auto}}) { // The width is set to auto
+			child.htmlNode.style.width = "auto";
+		}
+		else {
+			newWidthSize = this.computeSize(child.widthAttr);
+			child.htmlNode.style.width = newWidthSize+"px";
+		}
+
+
+		if (heightValue == {{max}}) { // The height is set to max
+			newHeightSize = this.getHeightSize() - this.computeSize(child.marginTopAttr) - this.computeSize(child.marginBottomAttr);
+			child.htmlNode.style.height = newHeightSize+"px";
+			// return;
+		}
+		else if (heightValue == {{auto}}) { // The height is set to auto
+			child.htmlNode.style.height = "auto";
+		}
+		else {
+			newHeightSize = this.computeSize(child.heightAttr);
+			child.htmlNode.style.height = newHeightSize+"px";
+		}
+
+
+		child.maxLayoutWidth	= (child.getWidthSize() > child.maxLayoutWidth) ? child.getWidthSize() : child.maxLayoutWidth;
+		child.maxLayoutHeight	= (child.getHeightSize() > child.maxLayoutHeight) ? child.getHeightSize() : child.maxLayoutHeight;
+
+	}
+
+	modelizeChildAfter(child) {
+
+	}
+
+};

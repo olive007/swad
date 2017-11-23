@@ -1,0 +1,95 @@
+Modeler.RelativeLayout = class extends Modeler.Layout {
+
+	// Constructor
+	constructor(htmlNode, screen, suffix) {
+		super(htmlNode, screen, suffix);
+
+		this.maxChildWidth	= .0;
+		this.maxChildHeight	= .0;
+	}
+
+	computeSize(attr) {
+
+		attr = attr || "0";
+
+		var attrValue = parseFloat(attr);
+		var refSize = .0;
+
+		if (attr.slice(-1) == "w") {
+			refSize = this.getWidthSize();
+		}
+		else {
+			refSize = this.getHeightSize();
+		}
+
+		return round(attrValue * refSize, 2);
+	}
+
+	// Method
+	modelize() {
+
+		super.modelize();
+
+		// Now change the position of the layout
+		this.htmlNode.style.position = "relative";
+
+		if (this.widthAttr == {{auto}}) {
+			this.htmlNode.style.width = this.maxChildWidth+"px";	
+		}
+		else if (this.heightAttr == {{auto}}) {
+			this.htmlNode.style.height = this.maxChildHeight+"px";	
+		}
+
+	}
+
+	modelizeChildBefore(child) {
+		// Get the width and the height attribute of the child
+		var widthValue = parseInt(child.widthAttr);
+		var heightValue = parseInt(child.heightAttr);
+
+		// Initialise width and height
+		var newWidth	= .0;
+		var newHeight	= .0;
+
+		if (widthValue == {{auto}}) {
+			newWidth = child.getWidthSize();
+		}
+		else {
+			newWidth = this.computeSize(child.widthAttr);
+			child.htmlNode.style.width = newWidth+"px";
+		}
+
+		if (heightValue == {{auto}}) {
+			newHeight = child.getHeightSize();
+		}
+		else {
+			newHeight = this.computeSize(child.heightAttr);
+			child.htmlNode.style.height = newHeight+"px";
+		}
+
+		this.maxChildWidth	= (this.maxChildWidth > newWidth) ? this.maxChildWidth : newWidth;
+		this.maxChildHeight	= (this.maxChildHeight > newHeight) ? this.maxChildHeight : newHeight;
+
+	}
+
+	modelizeChildAfter(child) {
+		var widthValue = parseInt(child.widthAttr);
+		var heightValue = parseInt(child.heightAttr);
+
+		var widthTmp = child.getWidthSize();
+		var heightTmp = child.getHeightSize();
+
+		child.htmlNode.style.position = "absolute";
+
+		if (widthValue == {{auto}}) {
+			child.htmlNode.style.width = widthTmp+"px";
+		}
+
+		if (heightValue == {{auto}}) {
+			child.htmlNode.style.height = heightTmp+"px";
+		}
+		
+	}
+
+
+};
