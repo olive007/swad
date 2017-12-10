@@ -1,0 +1,14 @@
+<IfModule mod_negotiation.c>
+  Options -MultiViews
+</IfModule>
+Options -Indexes
+RewriteEngine On
+
+# Add trailing slash for directories
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule [^/]$ %{REQUEST_URI}/ [L,R=301]
+
+# Redirect all route to index.php
+# Except the files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule .* index.php?$0/ [NC,L,QSA]

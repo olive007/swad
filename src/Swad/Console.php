@@ -2,7 +2,7 @@
 
 namespace Swad;
 
-use Swad\Application;
+use Swad\AbstractApplication;
 
 class Console {
 
@@ -11,7 +11,7 @@ class Console {
 
 
 	// Constructor
-	public function __construct(Application $app) {
+	public function __construct(AbstractApplication $app, string $testFolder) {
 
 		// Initialize attribute
 		$this->app = $app;

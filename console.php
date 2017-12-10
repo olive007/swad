@@ -6,7 +6,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $config = require __DIR__.'/test/config.php';
 
-$app = new Swad\Application($config);
+$app = new Application($config);
 
 $console = new Swad\Console($app, __DIR__.'/test/functionality');
 

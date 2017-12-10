@@ -6,12 +6,14 @@ use Swad\Routing\Router;
 use Swad\Routing\Request;
 use Swad\Routing\Response;
 
-class Application {
+abstract class AbstractApplication {
 
 	use Router;
 
 	// Constructor
 	public function __construct($config) {
+
+		AnnotationFactory::init();
 
 		// Get the type of value of the controller configuration
 		$valueType = gettype($config['controller.directory']);
@@ -31,14 +33,15 @@ class Application {
 	}
 
 	private function loadControllerFromDirectory($directoryName) {
+
 		// Open the directory
 		if ($handle = opendir($directoryName)) {
 
 			// List the file
 			while (false !== ($file = readdir($handle))) {
 			
-				// Check if that's a real file
-				if ($file === '.' || $file === '..' || $file === 'AbstractBase.php') {
+				// Check if file is not a directory or that isn't a Abstract class
+				if ($file === '.' || $file === '..' || preg_match('/Abstract\w*.php/', $file)) {
 					continue;
 				}
 
@@ -46,19 +49,19 @@ class Application {
 				$fileName = pathinfo($file, PATHINFO_FILENAME);
 				
 				// Get the name of the class
-				$className = "Api\\Controller\\".$fileName;
+				$className = "Controller\\".$fileName;
 
 				// Construct the class controller
 				$ctrl = new $className;
 
 				// Get the reflection
-				$r = new \ReflectionClass($ctrl);
+				$reflect = new \ReflectionClass($ctrl);
 
 				// Get the annotations class
-				$annotations = $annotationReader->getClassAnnotations($r);
+				$annotations = AnnotationFactory::getAnnotations($reflect);
 
 				foreach ($annotations as $annotation) {
-					$annotation->action($app, $ctrl);
+					$annotation->action($ctrl);
 				}
 
 			}

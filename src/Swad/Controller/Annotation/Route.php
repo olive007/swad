@@ -1,25 +1,28 @@
 <?php
 
-namespace Api\Annotation;
+namespace Swad\Controller\Annotation;
+
+use Swad\Annotation\AbstractAnnotation;
+use Swad\Controller\AbstractController;
 
 /**
- * @Annotation
  * @Target({"CLASS"})
  */
-class Route {
+class Route extends AbstractAnnotation {
 
 
 	// Attribute
-	private $path;
+	private $prefix;
 
-	public function __construct(array $values) {
-		$this->path = isset($values['value']) ? $values['value'] : "";
+	public function __construct(string $prefix = "") {
+		$this->prefix = $prefix;
 	}
 
 
 	// Method
-	public function action(\Pimple\Container $app, \Api\Controller\AbstractBase $ctrl) {
-		$app->mount("/".$app["api.path.prefix"]."/".$this->path, $ctrl);
+	public function action(AbstractController $ctrl) {
+		print($this->prefix);
+		$ctrl->setPrefix($this->prefix);
 	}
 
 }

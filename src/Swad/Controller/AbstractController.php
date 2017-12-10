@@ -1,26 +1,32 @@
 <?php
 
-namespace Api\Controller;
+namespace Swad\Controller;
 
-use Silex\Application;
-use Silex\ControllerCollection;
-use Silex\Api\ControllerProviderInterface;
+use Swad\Application;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
+abstract class AbstractController {
 
-abstract class AbstractBase implements ControllerProviderInterface {
 
+	// Attribute
 	protected $app;
 	protected $em;
+	private $prefix;
 
-	public function connect(Application $app) : ControllerCollection {
 
+	// Construtor
+	public function __constructor(Application $app) {
 		$this->app = $app;
-		$this->em = $app['orm.em'];
+	}
 
-		$factory = $app['controllers_factory'];
 
+	// Setter
+	public function setPrefix(string $arg) {
+		$this->prefix = $arg;
+	}
+
+	public function connect(Application $app) {
+
+		/*
 		$r = new \ReflectionClass($this);
 		
 		$methods = $r->getMethods();
@@ -39,6 +45,8 @@ abstract class AbstractBase implements ControllerProviderInterface {
 		}
 		
 		return $factory;
+
+		/**/
 	}
 
 
