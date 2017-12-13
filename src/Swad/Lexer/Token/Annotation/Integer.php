@@ -4,20 +4,20 @@ namespace Swad\Lexer\Token\Annotation;
 
 use Swad\Lexer\Token\Token;
 
-class Str extends Token {
+class Integer extends Token {
 
 
 	// Constructor
 	public function __construct(array $matches) {
 
 		// Call constructor form parent class
-		parent::__construct($matches, "STR");
+		parent::__construct($matches, "INTEGER");
 	}
 
 
 	// Getter
 	public function getValue() {
-		return $this->matches[2];
+		return intval($this->matches[0]);
 	}
 
 }

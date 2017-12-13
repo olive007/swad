@@ -6,35 +6,32 @@ abstract class AbstractToken {
 
 
 	// Attribute
-	private $matches;
+	protected $matches;
 
 
 	// Constructor
 	public function __construct(array $matches) {
-		$this->matches = $matches;
+
+		// Initialize attributes
+		$this->matches	= $matches;
 	}
 
 
 	// Getter
-	public function getLength() {
+	public abstract function getValue();
+
+	public abstract function getType() : string;
+
+	public function getLength() : int {
 		return strlen($this->matches[0]);
 	}
 
-	public function getValue() {
-		return $this->matches[0];
+	public function isParsed() : bool {
+		return FALSE;
 	}
-
-	public abstract function getType();
 
 
 	// Method
-	public function match(string $subject) : bool {
-
-		if (strtoupper($subject) == $this->getType()) {
-			return TRUE;
-		}
-
-		return FALSE;
-	}
+	public abstract function matchComponent(string $subject) : bool;
 
 }

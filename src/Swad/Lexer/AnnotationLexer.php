@@ -16,7 +16,7 @@ final class AnnotationLexer extends AbstractLexer {
 			'/^(["\'])(.*)\1/'	=> "Str"
 		];
 
-		self::$literals = "()[]{},:";
+		self::$literals = "()[]{},=";
 
 		self::$ns = "Swad\\Lexer\\Token\\Annotation";
 

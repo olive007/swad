@@ -10,23 +10,16 @@ class Rule {
 	// Attribute
 	private $name;
 	private $components;
-	private $actions;
+	private $action;
 
 
 	// Constructor
-	function __construct(string $name, array $components, array $actions) {
-		if (count($components) != count($actions)) {
-			throw new ParserException("Error Processing Request", 1);
-			
-		}
+	function __construct(string $name, string $components, callable $action) {
 
 		// Initialize attribute
 		$this->name = $name;
-		$this->components = [];
-		foreach ($components as $component) {
-			array_push($this->components, preg_split("/\s+/", $component));
-		}
-		$this->actions = $actions;
+		$this->components = preg_split("/\s+/", $components);
+		$this->action = $action;
 	}
 
 
@@ -35,7 +28,7 @@ class Rule {
 		return $this->name;
 	}
 
-	public function getComponent(int $index) : array {
+	public function getComponent(int $index) : string {
 		return $this->components[$index];
 	}
 
@@ -43,9 +36,24 @@ class Rule {
 		return count($this->components);
 	}
 
-	public function getAction(int $index) : callable {
-		return $this->actions[$index];
+	public function getAction() : callable {
+		return $this->action;
 	}
 
+
+	// Method
+	public function execute(array &$tokens, $config, int $offset) {
+
+		$action = $this->action;
+
+		$tmp = $action(array_slice($tokens, $offset, $this->getNbComponent()), $config);
+
+		$tokens = array_merge(
+			array_slice($tokens, 0, $offset + 1),
+			array_slice($tokens, $offset + $this->getNbComponent())
+		);
+		$tokens[$offset] = new TokenParsed($this, $tmp);
+
+	}
 
 }

@@ -60,6 +60,8 @@ abstract class AbstractApplication {
 				// Get the annotations class
 				$annotations = AnnotationFactory::getAnnotations($reflect);
 
+				print_r($annotations);
+
 				foreach ($annotations as $annotation) {
 					$annotation->action($ctrl);
 				}

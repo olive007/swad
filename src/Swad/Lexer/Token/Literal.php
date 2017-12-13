@@ -4,7 +4,12 @@ namespace Swad\Lexer\Token;
 
 class Literal extends AbstractToken {
 
+
 	// Getter
+	public function getValue() {
+		return $this->matches[0];
+	}
+
 	public function getType() : string {
 		return "LITERAL";
 	}
@@ -13,7 +18,7 @@ class Literal extends AbstractToken {
 	// Method
 	public function matchComponent(string $subject) : bool {
 
-		if (strcmp($subject, $this->getValue())) {
+		if ($subject == $this->getValue()) {
 			return TRUE;
 		}
 
